@@ -116,7 +116,7 @@ public class AdminController {
         return adminService.deleteAnnonceMaterialRepair(id);
     }
 
-    @PostMapping("/listMaterialsRepair")
+    @GetMapping("/listMaterialsRepair")
     public List<Equipment_Repair> listMaterialsRepair(){
         return adminService.listMaterialsRepair();
     }
