@@ -98,14 +98,18 @@ public class UserService {
             User user=userOptional.get();
             List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAccepted(user,false);
             List<Equipment_Repair>equipmentRepairsList=equipmentRepository.findByTechnician(null);
-            for(Equipment_Repair equipmentRepair:equipmentRepairList){
-                equipmentRepair.setTechnicianData(new TechnicianData(user.getId(),user.getUsername()));
-                equipmentRepair.setClientData(equipmentRepair.getClient());
+            if(equipmentRepairList!=null){
+                for(Equipment_Repair equipmentRepair:equipmentRepairList){
+                    equipmentRepair.setTechnicianData(new TechnicianData(user.getId(),user.getUsername()));
+                    equipmentRepair.setClientData(equipmentRepair.getClient());
+                }
             }
-            for(Equipment_Repair equipmentRepair:equipmentRepairsList){
-                equipmentRepair.setClientData(equipmentRepair.getClient());
+            if(equipmentRepairsList!=null) {
+                for (Equipment_Repair equipmentRepair : equipmentRepairsList) {
+                    equipmentRepair.setClientData(equipmentRepair.getClient());
+                }
+                equipmentRepairList.addAll(equipmentRepairsList);
             }
-            equipmentRepairList.addAll(equipmentRepairsList);
             return equipmentRepairList;
         }
         else{

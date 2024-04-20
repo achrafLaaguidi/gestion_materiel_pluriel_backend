@@ -62,5 +62,5 @@ public class Equipment_Repair {
     @JsonIgnore
     private Return_Slip returnSlip;
 
-    private Boolean isAccepted;
+    private Boolean isAccepted=false;
 }

@@ -102,6 +102,10 @@ public class AdminController {
     public Contract ContractInfo(@PathVariable int id){
         return adminService.ContractInfo(id);
     }
+    @GetMapping("/listMaterielsLivres")
+    public List<Equipment_Repair> listMaterielsLivres(){
+        return adminService.listMaterielsLivres();
+    }
     @PostMapping("/annonceMaterielRepair")
     public Equipment_Repair annonceMaterielRepair(@RequestBody Equipment_Repair equipment_Repair){
         return adminService.annonceMaterielRepair(equipment_Repair);

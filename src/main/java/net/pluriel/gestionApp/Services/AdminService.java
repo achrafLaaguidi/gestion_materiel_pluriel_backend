@@ -292,41 +292,32 @@ public class AdminService {
         return null;
     }
 
+    @Transactional
     public Equipment_Repair annonceMaterielRepair(Equipment_Repair equipmentRepair) {
-        if (equipmentRepository.findBySeriesNumber(equipmentRepair.getSeriesNumber()).isPresent()) {
-            throw new ConflictException(String.format("This Equipment [%s] already exists!", equipmentRepair.getSeriesNumber()));
-        }
-    if(equipmentRepair.getClientData()!=null) {
-        Optional<Client> clientOptional = clientRepository.findById(equipmentRepair.getClientData().getId());
-        if (clientOptional.isPresent()) {
-            Client client = clientOptional.get();
-            equipmentRepair.setClient(client);
-            equipmentRepair.setClientData(client);
+        Optional<Equipment_Repair> equipmentRepairOptional=equipmentRepository.findBySeriesNumber(equipmentRepair.getSeriesNumber());
+        if (equipmentRepairOptional.isPresent()) {
+            Equipment_Repair equipment_repair=equipmentRepairOptional.get();
+                  if (equipmentRepair.getTechnicianData() != null) {
+                    Optional<User> technicianOptional = userRepository.findByUsername(equipmentRepair.getTechnicianData().getUsername());
+                    if (technicianOptional.isPresent()) {
+                        User technician = technicianOptional.get();
 
-            if (equipmentRepair.getTechnicianData() != null) {
-                Optional<User> technicianOptional = userRepository.findByUsername(equipmentRepair.getTechnicianData().getUsername());
-                if (technicianOptional.isPresent()) {
-                    User technician = technicianOptional.get();
+                        equipment_repair.setTechnician(technician);
+                        equipment_repair.setTechnicianData(new TechnicianData(technician.getId(), technician.getUsername()));
 
-                    equipmentRepair.setTechnician(technician);
-                    equipmentRepair.setTechnicianData(new TechnicianData(technician.getId(), technician.getUsername()));
-
-                    technician.getEquipmentRepairList().add(equipmentRepair);
-                    userRepository.save(technician);
-                } else {
-                    throw new NotFoundException(
-                            String.format("Technician [%s] not found!", equipmentRepair.getTechnicianData().getUsername()));
+                        technician.getEquipmentRepairList().add(equipment_repair);
+                        userRepository.save(technician);
+                    } else {
+                        throw new NotFoundException(
+                                String.format("Technician [%s] not found!", equipment_repair.getTechnicianData().getUsername()));
+                    }
                 }
-            }
-                equipmentRepository.save(equipmentRepair);
-                client.getEquipmentRepairList().add(equipmentRepair);
-                clientRepository.save(client);
-
-        } else {
-            throw new NotFoundException(String.format("Client with ID [%d] not found!", equipmentRepair.getClientData().getId()));
+                  return equipmentRepository.save(equipment_repair);
         }
-    }
-        return equipmentRepair;
+        else{
+            throw new NotFoundException(String.format("This Equipment [%s] is not found!", equipmentRepair.getSeriesNumber()));
+        }
+
     }
 
     @Transactional
@@ -380,5 +371,20 @@ public class AdminService {
 
     public List<Equipment_Repair> listMaterialsRepair() {
         return equipmentRepository.findByIsAccepted(true);
+    }
+
+    public List<Equipment_Repair> listMaterielsLivres() {
+        List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByIsAccepted(false);
+        for (Equipment_Repair equipmentRepair : equipmentRepairList) {
+            if(equipmentRepair.getClient()!=null){
+                equipmentRepair.setClientData(equipmentRepair.getClient());
+            }
+            if(equipmentRepair.getTechnician()!=null){
+                User technician=equipmentRepair.getTechnician();
+                equipmentRepair.setTechnicianData(new TechnicianData(technician.getId(), technician.getUsername()));
+            }
+
+        }
+       return equipmentRepairList;
     }
 }
