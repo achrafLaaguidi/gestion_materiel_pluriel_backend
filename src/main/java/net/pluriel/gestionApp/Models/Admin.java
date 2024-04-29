@@ -1,9 +1,12 @@
 package net.pluriel.gestionApp.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.boot.convert.DataSizeUnit;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Admin")

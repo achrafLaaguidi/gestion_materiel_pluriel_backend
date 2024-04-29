@@ -30,7 +30,4 @@ private Status status=Status.INACTIVE;
 @JsonIgnore
 private Client client;
 
-@Transient
-private Object clientData;
-
 }

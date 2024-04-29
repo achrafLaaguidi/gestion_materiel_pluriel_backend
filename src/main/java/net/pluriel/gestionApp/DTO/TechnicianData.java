@@ -1,4 +1,4 @@
-package net.pluriel.gestionApp.Models;
+package net.pluriel.gestionApp.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

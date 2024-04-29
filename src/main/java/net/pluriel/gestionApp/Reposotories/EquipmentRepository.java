@@ -1,7 +1,6 @@
 package net.pluriel.gestionApp.Reposotories;
 
 import net.pluriel.gestionApp.Models.Equipment_Repair;
-import net.pluriel.gestionApp.Models.TechnicianData;
 import net.pluriel.gestionApp.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,9 +1,12 @@
 package net.pluriel.gestionApp.Services;
 
 import jakarta.transaction.Transactional;
+import net.pluriel.gestionApp.DTO.TechnicianData;
 import net.pluriel.gestionApp.Errors.ConflictException;
 import net.pluriel.gestionApp.Errors.NotFoundException;
 import net.pluriel.gestionApp.Models.*;
+import net.pluriel.gestionApp.Models.User;
+import net.pluriel.gestionApp.Reposotories.AdminRepository;
 import net.pluriel.gestionApp.Reposotories.ClientRepository;
 import net.pluriel.gestionApp.Reposotories.EquipmentRepository;
 import net.pluriel.gestionApp.Reposotories.UserRepository;
@@ -15,19 +18,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UsersService {
     final
     UserRepository repository;
     final EquipmentRepository equipmentRepository;
      final UserRepository userRepository;
     final ClientRepository clientRepository;
+    final AdminRepository adminRepository;
 
     @Autowired
-    public UserService(UserRepository repository, EquipmentRepository equipmentRepository, UserRepository userRepository, ClientRepository clientRepository) {
+    public UsersService(UserRepository repository, EquipmentRepository equipmentRepository, UserRepository userRepository, ClientRepository clientRepository, AdminRepository adminRepository) {
         this.repository = repository;
         this.equipmentRepository = equipmentRepository;
         this.userRepository = userRepository;
         this.clientRepository = clientRepository;
+        this.adminRepository = adminRepository;
     }
 
     public TechnicianData authenticate(User user) {
@@ -52,6 +57,52 @@ public class UserService {
         if (equipmentRepository.findBySeriesNumber(equipmentRepair.getSeriesNumber()).isPresent()) {
             throw new ConflictException(String.format("This Equipment [%s] already exists!", equipmentRepair.getSeriesNumber()));
         }
+        if(id==0) {
+            Optional<Admin> adminOptional = adminRepository.findById(id);
+            if (adminOptional.isPresent()) {
+                Admin admin = adminOptional.get();
+                equipmentRepair.setTechnicianLivreur(admin.getUsername());
+            } else {
+                throw new NotFoundException(
+                        String.format("Technician with Id[%d] not found!", equipmentRepair.getTechnicianLivreur()));
+            }
+        }
+        else{
+            Optional<User> technicianOptional = userRepository.findById(id);
+            if (technicianOptional.isPresent()) {
+                User technician = technicianOptional.get();
+                equipmentRepair.setTechnicianLivreur(technician.getUsername());
+            } else {
+                throw new NotFoundException(
+                        String.format("Technician with Id[%d] not found!", equipmentRepair.getTechnicianLivreur()));
+            }
+        }
+        if (equipmentRepair.getTechnicianData() != null) {
+            if(equipmentRepair.getTechnicianData().getId()==0){
+                Optional<Admin> adminOptional=adminRepository.findById(0);
+                if (adminOptional.isPresent()) {
+                    Admin admin=adminOptional.get();
+                    equipmentRepair.setTechnician(new User(admin.getId(),admin.getUsername()));
+                    equipmentRepair.setIsAccepted(true);
+                }
+                else {
+                    throw new NotFoundException(
+                            String.format("Technician [%s] not found!", equipmentRepair.getTechnicianData().getUsername()));
+                }
+            }
+            else{
+                Optional<User> technicianOptional = userRepository.findByUsername(equipmentRepair.getTechnicianData().getUsername());
+                if (technicianOptional.isPresent()) {
+                    User technician = technicianOptional.get();
+
+                    equipmentRepair.setTechnician(technician);
+                } else {
+                    throw new NotFoundException(
+                            String.format("Technician [%s] not found!", equipmentRepair.getTechnicianData().getUsername()));
+                }
+            }
+
+        }
         if(equipmentRepair.getClientData()!=null) {
             Optional<Client> clientOptional = clientRepository.findById(equipmentRepair.getClientData().getId());
             if (clientOptional.isPresent()) {
@@ -59,14 +110,7 @@ public class UserService {
                 equipmentRepair.setClient(client);
                 equipmentRepair.setClientData(client);
 
-                Optional<User> technicianOptional = userRepository.findById(id);
-                if (technicianOptional.isPresent()) {
-                    User technician = technicianOptional.get();
-                    equipmentRepair.setTechnicianLivreur(technician.getUsername());
-                } else {
-                    throw new NotFoundException(
-                            String.format("Technician [%s] not found!", equipmentRepair.getTechnicianData().getUsername()));
-                }
+
                 equipmentRepository.save(equipmentRepair);
                 client.getEquipmentRepairList().add(equipmentRepair);
                 clientRepository.save(client);
@@ -74,12 +118,14 @@ public class UserService {
             } else {
                 throw new NotFoundException(String.format("Client with ID [%d] not found!", equipmentRepair.getClientData().getId()));
             }
+
+
         }
         return equipmentRepair;
     }
 
-    public List<Equipment_Repair> listMaterielAdded(int id) {
-        Optional<User> userOptional = repository.findById(id);
+    public List<Equipment_Repair> listMaterielAdded(String username) {
+        Optional<User> userOptional = repository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             List<Equipment_Repair> equipmentRepairList = equipmentRepository.findByTechnicianLivreur(user.getUsername());
@@ -92,8 +138,8 @@ public class UserService {
     }
 
 
-    public List<Equipment_Repair> listMaterielDemandeRepair(int id) {
-        Optional<User> userOptional =repository.findById(id);
+    public List<Equipment_Repair> listMaterielDemandeRepair(String username) {
+        Optional<User> userOptional =repository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
             List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAccepted(user,false);
@@ -118,14 +164,14 @@ public class UserService {
     }
 
     @Transactional()
-    public Boolean accepteAnnonce(int materielId,int id) {
+    public Boolean accepteAnnonce(int materielId,String username) {
         Optional<Equipment_Repair> equipmentRepairOptional=equipmentRepository.findById(materielId);
         if(equipmentRepairOptional.isPresent()){
             Equipment_Repair equipmentRepair=equipmentRepairOptional.get();
             equipmentRepair.setIsAccepted(true);
             if(equipmentRepair.getTechnicianData()==null){
-                User user=repository.findById(id)
-                        .orElseThrow(() -> new NotFoundException(String.format("Technician with[%d] not found!",id)));
+                User user=repository.findByUsername(username)
+                        .orElseThrow(() -> new NotFoundException(String.format("Technician [%s] not found!",username)));
                 equipmentRepair.setTechnicianData(new TechnicianData(user.getId(), user.getUsername()));
                 equipmentRepair.setTechnician(user);
             }
@@ -137,8 +183,8 @@ public class UserService {
         }
     }
 
-    public List<Equipment_Repair> listMaterialsRepair(int id) {
-        Optional<User> userOptional =repository.findById(id);
+    public List<Equipment_Repair> listMaterialsRepair(String username) {
+        Optional<User> userOptional =repository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
             List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAccepted(user,true);

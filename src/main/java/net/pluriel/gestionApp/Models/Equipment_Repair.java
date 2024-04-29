@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.pluriel.gestionApp.DTO.TechnicianData;
 
-import java.util.Date;
 @Entity
 @Table(name = "Equipment_Repair")
 @Data
@@ -56,11 +56,6 @@ public class Equipment_Repair {
     private String dureeIntervention;
 
     private String intervention;
-
-    @OneToOne
-    @JoinColumn(name = "returnSlip")
-    @JsonIgnore
-    private Return_Slip returnSlip;
 
     private Boolean isAccepted=false;
 }
