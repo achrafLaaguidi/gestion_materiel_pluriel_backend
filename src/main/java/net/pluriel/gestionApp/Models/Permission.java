@@ -1,11 +1,14 @@
 package net.pluriel.gestionApp.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -18,4 +21,7 @@ public class Permission {
 
     private String name;
 
+    @ManyToMany
+    @JsonIgnore
+    private List<Role> roles;
 }

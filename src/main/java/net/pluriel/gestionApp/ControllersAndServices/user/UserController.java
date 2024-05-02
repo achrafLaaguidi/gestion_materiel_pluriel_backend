@@ -1,7 +1,7 @@
 package net.pluriel.gestionApp.ControllersAndServices.user;
 
 import lombok.AllArgsConstructor;
-import net.pluriel.gestionApp.DTO.UserDto;
+import net.pluriel.gestionApp.DTO.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +20,10 @@ public class UserController {
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(userService.authenticate(request));
+    }
+    @GetMapping("/getToken/{tokenName}")
+    public TokenIsRevoked getToken(@PathVariable String tokenName){
+        return userService.getToken(tokenName);
     }
     @PostMapping("/addUser")
     public ResponseEntity<AuthenticationResponse> addUser(
@@ -46,7 +50,29 @@ public class UserController {
         return userService.listUser();
     }
 
+
     @GetMapping("/listUserActive")
     public List<UserDto> listUserActive(){return userService.listUserActive();}
+
+    @PostMapping("/addRole")
+    public RoleDto addRole(@RequestBody RoleDto role){
+        return userService.addRole(role);
+    }
+    @PutMapping("/modifyRole")
+    public boolean modifyRole(@RequestBody RoleDto role){
+        return userService.modifyRole(role);
+    }
+    @DeleteMapping("/deleteRole/{id}")
+    public boolean deleteRole(@PathVariable int id){
+        return userService.deleteRole(id);
+    }
+    @GetMapping("/listPermissions")
+    public List<PermissionDto> listPermissions() {
+        return userService.listPermissions();
+    }
+    @GetMapping("/listRoles")
+    public List<RoleDto> listRoles() {
+        return userService.listRoles();
+    }
 
 }

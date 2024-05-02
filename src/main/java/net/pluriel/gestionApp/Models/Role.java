@@ -26,12 +26,12 @@ public class Role {
 
     private String roleName;
 
-    @OneToMany
+    @OneToMany(mappedBy = "role")
     @JsonIgnore
-    private List<User> user;
+    private List<User> users;
 
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Permission> permissions;
 
@@ -43,7 +43,7 @@ public class Role {
             var list=getPermissions()
                     .stream()
                     .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                    .toList();
+                            .toList();
             authorities.addAll(list);
         }
         return authorities;

@@ -33,8 +33,6 @@ public class Equipment_Repair {
     @JsonIgnore
     private Client client;
 
-    @Transient
-    private Client clientData;
 
     @ManyToOne
     @JoinColumn(name = "technician_id")
@@ -42,10 +40,8 @@ public class Equipment_Repair {
     private User technician;
 
 
-    private String technicianLivreur;
+    private String entreeBy;
 
-    @Transient
-    private TechnicianData technicianData;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private String entryDate;

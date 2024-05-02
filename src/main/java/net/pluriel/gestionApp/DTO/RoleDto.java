@@ -19,7 +19,7 @@ public class RoleDto {
 
     private String roleName;
 
-    private List<User> user;
+    private List<User> users;
 
     private List<Permission> permissions;
 }

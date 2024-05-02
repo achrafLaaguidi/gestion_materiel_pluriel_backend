@@ -1,15 +1,17 @@
 package net.pluriel.gestionApp.DTO;
 
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.pluriel.gestionApp.Models.Client;
+import net.pluriel.gestionApp.Models.User;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EquipmentDto {
+public class EquipmentRepairDto {
     private Integer id;
 
     private String seriesNumber;
@@ -21,11 +23,13 @@ public class EquipmentDto {
     private String type;
 
 
-    private Client clientData;
+    private Client client;
 
-    private String technicianLivreur;
+    private User technician;
 
-    private TechnicianData technicianData;
+
+    private String entreeBy;
+
 
     private String entryDate;
 

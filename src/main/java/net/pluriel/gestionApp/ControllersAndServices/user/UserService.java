@@ -3,13 +3,11 @@ package net.pluriel.gestionApp.ControllersAndServices.user;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import net.pluriel.gestionApp.Configuration.config.JwtService;
-import net.pluriel.gestionApp.DTO.UserDto;
+import net.pluriel.gestionApp.DTO.*;
 import net.pluriel.gestionApp.Errors.ConflictException;
 import net.pluriel.gestionApp.Errors.NotFoundException;
 import net.pluriel.gestionApp.Models.*;
-import net.pluriel.gestionApp.Reposotories.RoleRepository;
-import net.pluriel.gestionApp.Reposotories.TokenRepository;
-import net.pluriel.gestionApp.Reposotories.UserRepository;
+import net.pluriel.gestionApp.Reposotories.*;
 import net.pluriel.gestionApp.mappers.DtoMapper;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +16,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,29 +30,35 @@ public class UserService {
     final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final UserRepository repository;
+    private final EquipmentRepository equipmentRepository;
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PermissionRepository permissionRepository;
 
+    @Transactional
     public AuthenticationResponse addUser(UserDto request) {
         Optional<User> userOptional=repository.findByUsername(request.getUsername());
         if(userOptional.isPresent()){
             throw new ConflictException("User is already exist ");
         }
-        Role role=dtoMapper.toRole(request.getRole());
-        Role roleSaved=roleRepository.save(role);
+        Role role =dtoMapper.toRole(request.getRole());
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getLastName())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .status(request.getStatus())
-                .role(roleSaved)
+                .role(role)
                 .build();
 
         var savedUser = repository.save(user);
-        role.getUser().add(savedUser);
-        roleRepository.save(roleSaved);
+       if(role.getUsers()!=null){
+           role.getUsers().add(savedUser);}
+       else{
+           role.setUsers(new ArrayList<>(List.of(savedUser)));
+       }
+        Role roleSavedU=roleRepository.save(role);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
@@ -70,6 +75,13 @@ public class UserService {
                 if (userOptionalUsername.isPresent()&&!userOptionalUsername.get().getId().equals(user.getId())) {
                     throw new ConflictException("The username is already exist !UNIQUE!");
                 }
+                List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByEntreeBy(userExisting.getUsername());
+                if(equipmentRepairList!=null){
+                    for(Equipment_Repair equipmentRepair:equipmentRepairList){
+                        equipmentRepair.setEntreeBy(user.getUsername());
+                        equipmentRepository.save(equipmentRepair);
+                    }
+                }
                 userExisting.setUsername(user.getUsername());
             }
             if(user.getFirstName() != null)
@@ -81,12 +93,22 @@ public class UserService {
             if(user.getStatus()!=null)
                 userExisting.setStatus(user.getStatus());
             if(user.getRole()!=null) {
-                userExisting.setRole(dtoMapper.toRole(user.getRole()));
-                Role role=roleRepository.findById(userExisting.getRole().getRoleId()).orElse(null);
-                assert role != null;
-                role.setRoleName(user.getRole().getRoleName());
-                role.setPermissions(user.getRole().getPermissions());
-                roleRepository.save(role);
+                Role roleSaved;
+                Optional<Role> roleOptional=roleRepository.findById(user.getRole().getRoleId());
+                if(roleOptional.isPresent()) {
+                    roleSaved = roleOptional.get();
+                    userExisting.setRole(roleSaved);
+                    var savedUser = repository.save(userExisting);
+                    if (roleSaved.getUsers() != null)
+                        roleSaved.getUsers().add(savedUser);
+                    else {
+                        roleSaved.setUsers(new ArrayList<>(List.of(savedUser)));
+                    }
+                    roleRepository.save(roleSaved);
+                }
+            }
+            if(user.getRole()!=null||user.getUsername()!=null){
+                revokeAllUserTokens(userExisting);
             }
 
 
@@ -190,4 +212,111 @@ public class UserService {
         List<User> userList = userRepository.findByStatus(Status.ACTIVE);
         return dtoMapper.toUsersDto(userList);}
 
+    public RoleDto addRole(RoleDto role) {
+        Optional<Role> roleOptional=roleRepository.findByRoleName(role.getRoleName());
+        if(roleOptional.isEmpty()){
+            Role newRole=Role.builder()
+                    .roleName(role.getRoleName())
+                    .permissions(role.getPermissions())
+                    .build();
+            Role roleSaved=roleRepository.save(newRole);
+            for(Permission permission:roleSaved.getPermissions()){
+                Permission permissionFounded=permissionRepository.findById(permission.getId()).orElse(null);
+                if(permissionFounded!=null){
+                    permissionFounded.getRoles().add(roleSaved);
+                    permissionRepository.save(permissionFounded);
+                }
+            }
+            return dtoMapper.toRoleDto(roleSaved);
+
+        }
+        else{
+            throw new ConflictException("This role is already in use");
+        }
+    }
+
+    @Transactional
+    public boolean modifyRole(RoleDto role) {
+        Optional<Role> roleOptional = roleRepository.findById(role.getRoleId());
+        if (roleOptional.isPresent()) {
+            Role roleExisting = roleOptional.get();
+            if (role.getRoleName() != null) {
+                roleExisting.setRoleName(role.getRoleName());
+            }
+            if (role.getPermissions()!=null) {
+                List<Permission> updatedPermissions = new ArrayList<>();
+                for (Permission permission : role.getPermissions()) {
+                    Optional<Permission> permissionOptional = permissionRepository.findById(permission.getId());
+                    if (permissionOptional.isPresent()) {
+                        Permission permissionExisting = permissionOptional.get();
+                        if (!permissionExisting.getRoles().contains(roleExisting)) {
+                            permissionExisting.getRoles().add(roleExisting);
+                        }
+                        updatedPermissions.add(permissionExisting);
+                    }
+                }
+                permissionRepository.saveAll(updatedPermissions);
+
+                for (Permission permission : roleExisting.getPermissions()) {
+                    if (!updatedPermissions.contains(permission)) {
+                        permission.getRoles().remove(roleExisting);
+                        permissionRepository.save(permission);
+                    }
+                }
+
+                roleExisting.setPermissions(updatedPermissions);
+            }
+            roleRepository.save(roleExisting);
+                return true;
+            }
+        else {
+                throw new NotFoundException(String.format("This role [%d] is not found", role.getRoleId()));
+            }
+        }
+
+        @Transactional
+        public Boolean deleteRole(int id){
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        if (roleOptional.isPresent()) {
+            Role roleExisting = roleOptional.get();
+            for (Permission permission : roleExisting.getPermissions()) {
+                Optional<Permission> permissionOptional = permissionRepository.findById(permission.getId());
+                if (permissionOptional.isPresent()) {
+                    Permission permissionExisting = permissionOptional.get();
+                    permissionExisting.getRoles().remove(roleExisting);
+                    permissionRepository.save(permissionExisting);
+                }
+            }
+            for (User user : roleExisting.getUsers()) {
+                Optional<User> userOptional = userRepository.findById(user.getId());
+                if (userOptional.isPresent()) {
+                    User userExisting = userOptional.get();
+                    userExisting.setRole(roleRepository.findByRoleName("USER").orElse(null));
+                    userRepository.save(userExisting);
+                }
+            }
+            roleRepository.delete(roleOptional.get());
+            return true;
+        }else{
+            throw new NotFoundException(String.format("This role [%d] is not found", id));
+        }
+        }
+    public List<PermissionDto> listPermissions() {
+        List<Permission> permissions = permissionRepository.findAll();
+        return dtoMapper.toPermissionsDto(permissions);
+    }
+    public List<RoleDto> listRoles() {
+        List<Role> roles = roleRepository.findAll();
+        return dtoMapper.toRolesDto(roles);
+    }
+
+    public TokenIsRevoked getToken(String tokenName) {
+        Token token=tokenRepository.findByToken(tokenName).orElse(null);
+        if(token!=null){
+            return TokenIsRevoked.builder()
+                    .isRevoked(token.revoked)
+                    .build();
+        }
+        return null;
+    }
 }

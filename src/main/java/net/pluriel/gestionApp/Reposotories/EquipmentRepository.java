@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface EquipmentRepository extends JpaRepository<Equipment_Repair,Integer> {
     Optional<Equipment_Repair> findBySeriesNumber(String seriesNumber);
     List<Equipment_Repair> findByTechnician(User technician);
-    List<Equipment_Repair> findByTechnicianLivreur(String username);
+    List<Equipment_Repair> findByEntreeBy(String username);
     List<Equipment_Repair> findByIsAccepted(boolean isAccepted);
     List<Equipment_Repair> findByTechnicianAndIsAccepted(User technician,boolean isAccepted);
 }

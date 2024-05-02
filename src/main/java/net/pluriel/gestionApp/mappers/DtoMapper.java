@@ -50,11 +50,14 @@ public class DtoMapper {
         }
         return contractDtos;
     }
-    public EquipmentDto toEquipmentDto(Equipment_Repair equipment_repair){
-        return modelMapper.map(equipment_repair, EquipmentDto.class);
+    public EquipmentRepairDto toEquipmentDto(Equipment_Repair equipment_repair){
+        return modelMapper.map(equipment_repair, EquipmentRepairDto.class);
     }
     public PermissionDto toPermissionDto(Permission permission){
         return modelMapper.map(permission, PermissionDto.class);
+    }
+    public TokenDto toTokenDto(Token token){
+        return modelMapper.map(token, TokenDto.class);
     }
     public List<UserDto> toUsersDto(List<User> users){
         List<UserDto> userDtos = new ArrayList<>();
@@ -62,6 +65,13 @@ public class DtoMapper {
             userDtos.add(toUserDto(user));
         }
         return userDtos;
+    }
+    public List<EquipmentRepairDto> toEquipmentsDto(List<Equipment_Repair> equipmentRepairList){
+        List<EquipmentRepairDto> equipmentRepairDtos = new ArrayList<>();
+        for(Equipment_Repair equipment_repair : equipmentRepairList){
+            equipmentRepairDtos.add(toEquipmentDto(equipment_repair));
+        }
+        return equipmentRepairDtos;
     }
 
     public List<PermissionDto> toPermissionsDto(List<Permission> permissions){
@@ -82,5 +92,21 @@ public class DtoMapper {
 
     public User toUser(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
+    }
+
+    public List<Permission> toPermissions(List<PermissionDto> permissionDtos) {
+        List<Permission> permissions = new ArrayList<>();
+        for(PermissionDto permissionDto : permissionDtos){
+            permissions.add(toPermission(permissionDto));
+        }
+        return permissions;
+    }
+
+    private Permission toPermission(PermissionDto permissionDto) {
+        return modelMapper.map(permissionDto, Permission.class);
+    }
+
+    public Equipment_Repair toEquipment(EquipmentRepairDto equipmentRepairDto) {
+        return modelMapper.map(equipmentRepairDto, Equipment_Repair.class);
     }
 }

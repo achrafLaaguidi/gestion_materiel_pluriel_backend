@@ -106,6 +106,6 @@ public class ClientService {
     }
 
     public List<ClientDto> listClient(){
-        List<Client> clients=clientRepository.findAllByOrderByIdDesc();
+        List<Client> clients=clientRepository.findAll();
         return dtoMapper.toClientsDto(clients);}
 }
