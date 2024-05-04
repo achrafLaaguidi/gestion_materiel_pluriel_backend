@@ -200,7 +200,7 @@ private final UserRepository userRepository;
     }
 
     public List<EquipmentRepairDto> listMaterialsOfToday(String entryDate) {
-        List<Equipment_Repair> repairDtoList=equipmentRepository.findByEntryDate(entryDate);
+        List<Equipment_Repair> repairDtoList=equipmentRepository.findByEntryDateAndIsAccepted(entryDate,true);
         return dtoMapper.toEquipmentsDto(repairDtoList);
     }
 }

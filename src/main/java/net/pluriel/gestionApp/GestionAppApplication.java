@@ -62,14 +62,11 @@ public class GestionAppApplication {
 						new Permission(15,"delete_material",List.of(roleAdminSaved,roleManagerSaved,roleUserSaved)),
 						new Permission(16,"view_material",List.of(roleAdminSaved,roleManagerSaved,roleUserSaved)),
 						new Permission(17,"edit_materials",List.of(roleAdminSaved)),
-						new Permission(18,"delete_materials",List.of(roleAdminSaved)),
-						new Permission(19,"view_materials",List.of(roleAdminSaved)),
-						new Permission(20,"add_annonce",List.of(roleAdminSaved,roleManagerSaved)),
-						new Permission(21,"edit_annonce",List.of(roleAdminSaved,roleManagerSaved)),
-						new Permission(22,"add_role",List.of(roleAdminSaved)),
-						new Permission(23,"edit_role",List.of(roleAdminSaved)),
-						new Permission(24,"delete_role",List.of(roleAdminSaved)),
-						new Permission(25,"view_roles",List.of(roleAdminSaved))
+						new Permission(18,"view_materials",List.of(roleAdminSaved)),
+						new Permission(19,"add_role",List.of(roleAdminSaved)),
+						new Permission(20,"edit_role",List.of(roleAdminSaved)),
+						new Permission(21,"delete_role",List.of(roleAdminSaved)),
+						new Permission(22,"view_roles",List.of(roleAdminSaved))
 				));
 				permissionRepository.saveAll(permissions);
 				roleAdminSaved.setPermissions(permissions);
@@ -85,17 +82,11 @@ public class GestionAppApplication {
 						permissionRepository.findByName("add_material").orElseThrow(),
 						permissionRepository.findByName("edit_material").orElseThrow(),
 						permissionRepository.findByName("delete_material").orElseThrow(),
-						permissionRepository.findByName("view_material").orElseThrow(),
-						permissionRepository.findByName("add_annonce").orElseThrow(),
-						permissionRepository.findByName("edit_annonce").orElseThrow()
+						permissionRepository.findByName("view_material").orElseThrow()
 				);
 				roleManagerSaved.setPermissions(managerPermissions);
 				roleRepository.save(roleManagerSaved);
 				List<Permission> userPermissions = Arrays.asList(
-						permissionRepository.findByName("add_user").orElseThrow(),
-						permissionRepository.findByName("edit_user").orElseThrow(),
-						permissionRepository.findByName("delete_user").orElseThrow(),
-						permissionRepository.findByName("view_users").orElseThrow(),
 						permissionRepository.findByName("add_material").orElseThrow(),
 						permissionRepository.findByName("edit_material").orElseThrow(),
 						permissionRepository.findByName("delete_material").orElseThrow(),
@@ -106,7 +97,7 @@ public class GestionAppApplication {
 				var admin = UserDto.builder()
 						.firstName("Admin")
 						.lastName("Admin")
-						.username("Pluriel")
+						.username("Yassine")
 						.password("az")
 						.status(Status.ACTIVE)
 						.role(dtoMapper.toRoleDto(roleAdminSaved))
