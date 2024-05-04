@@ -39,7 +39,7 @@ public class Client {
     private Double capitalSocial;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private Date dateDeCreation;
+    private String dateDeCreation;
 
     private String adresse;
 

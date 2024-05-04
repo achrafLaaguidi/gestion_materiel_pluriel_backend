@@ -75,7 +75,7 @@ public class UserService {
                 if (userOptionalUsername.isPresent()&&!userOptionalUsername.get().getId().equals(user.getId())) {
                     throw new ConflictException("The username is already exist !UNIQUE!");
                 }
-                List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByEntreeBy(userExisting.getUsername());
+                List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByEntreeByOrderByEntryDateDesc(userExisting.getUsername());
                 if(equipmentRepairList!=null){
                     for(Equipment_Repair equipmentRepair:equipmentRepairList){
                         equipmentRepair.setEntreeBy(user.getUsername());

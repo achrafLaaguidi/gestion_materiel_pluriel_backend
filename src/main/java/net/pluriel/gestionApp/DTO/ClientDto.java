@@ -32,7 +32,7 @@ public class ClientDto {
 
     private Double capitalSocial;
 
-    private Date dateDeCreation;
+    private String dateDeCreation;
 
     private String adresse;
 

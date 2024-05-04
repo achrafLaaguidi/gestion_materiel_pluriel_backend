@@ -18,6 +18,10 @@ public class MaterialController {
     public List<EquipmentRepairDto> listMaterialsEntree(){
         return materialService.listMaterialsEntree();
     }
+    @GetMapping("/list_Materials_Of_Today/{entryDate}")
+    public List<EquipmentRepairDto> listMaterialsOfToday(@PathVariable String entryDate){
+        return materialService.listMaterialsOfToday(entryDate);
+    }
 
     @PostMapping("/addMaterielRepair")
     public EquipmentRepairDto addMaterielRepair(@RequestBody EquipmentRepairDto equipment_repair){
@@ -47,6 +51,10 @@ public class MaterialController {
     @GetMapping("/listMaterialsRepairByAll")
     public List<EquipmentRepairDto> listMaterialsRepairByAll(){
         return materialService.listMaterialsRepairByAll();
+    }
+    @GetMapping("/listMaterialsHistory")
+    public List<EquipmentRepairDto> listMaterialsHistory(){
+        return materialService.listMaterialsHistory();
     }
     @GetMapping("/listMaterialsRepairedByTechnician/{username}")
     public List<EquipmentRepairDto> listMaterialsRepaiedrByTechnician(@PathVariable String username){

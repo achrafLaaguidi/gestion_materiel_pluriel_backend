@@ -132,8 +132,8 @@ public class AnnonceService {
         Optional<User> userOptional =userRepository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
-            List<Equipment_Repair> equipmentRepairListByTechnician=equipmentRepository.findByTechnicianAndIsAccepted(user,false);
-            List<Equipment_Repair>equipmentRepairList=equipmentRepository.findByTechnician(null);
+            List<Equipment_Repair> equipmentRepairListByTechnician=equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,false);
+            List<Equipment_Repair>equipmentRepairList=equipmentRepository.findByTechnicianOrderByEntryDateDesc(null);
             equipmentRepairListByTechnician.addAll(equipmentRepairList);
             return dtoMapper.toEquipmentsDto(equipmentRepairListByTechnician);
         }

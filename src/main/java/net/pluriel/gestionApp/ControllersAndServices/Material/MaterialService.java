@@ -9,6 +9,7 @@ import net.pluriel.gestionApp.Errors.NotFoundException;
 
 import net.pluriel.gestionApp.Models.Client;
 import net.pluriel.gestionApp.Models.Equipment_Repair;
+import net.pluriel.gestionApp.Models.Status;
 import net.pluriel.gestionApp.Models.User;
 import net.pluriel.gestionApp.Reposotories.ClientRepository;
 import net.pluriel.gestionApp.Reposotories.EquipmentRepository;
@@ -78,7 +79,7 @@ private final UserRepository userRepository;
     }
 
     public List<EquipmentRepairDto> listMaterialsEntree() {
-        List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByIsAccepted(false);
+        List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByIsAcceptedOrderByEntryDateDesc(false);
         return dtoMapper.toEquipmentsDto(equipmentRepairList);
     }
 
@@ -136,7 +137,7 @@ private final UserRepository userRepository;
 
     public List<EquipmentRepairDto> listMaterielAdded(String username) {
 
-            List<Equipment_Repair> equipmentRepairList = equipmentRepository.findByEntreeBy(username);
+            List<Equipment_Repair> equipmentRepairList = equipmentRepository.findByEntreeByOrderByEntryDateDesc(username);
             return dtoMapper.toEquipmentsDto(equipmentRepairList);
 
     }
@@ -150,7 +151,7 @@ private final UserRepository userRepository;
         Optional<User> userOptional =userRepository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
-            List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAccepted(user,true);
+            List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true);
             return dtoMapper.toEquipmentsDto(equipmentRepairList);
         }
         else{
@@ -159,8 +160,19 @@ private final UserRepository userRepository;
     }
 
     public List<EquipmentRepairDto> listMaterialsRepairByAll() {
-        List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByIsAccepted(true);
-
+        List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
+        List<User> userList=userRepository.findByStatus(Status.ACTIVE);
+        for(User user:userList){
+            equipmentRepairList.addAll(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
+        }
+        return dtoMapper.toEquipmentsDto(equipmentRepairList) ;
+    }
+    public List<EquipmentRepairDto> listMaterialsHistory() {
+        List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
+        List<User> userList=userRepository.findByStatus(Status.INACTIVE);
+        for(User user:userList){
+            equipmentRepairList.addAll(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
+        }
         return dtoMapper.toEquipmentsDto(equipmentRepairList) ;
     }
 
@@ -185,5 +197,10 @@ private final UserRepository userRepository;
             }
         }
         return equipmentRepairDtos;
+    }
+
+    public List<EquipmentRepairDto> listMaterialsOfToday(String entryDate) {
+        List<Equipment_Repair> repairDtoList=equipmentRepository.findByEntryDate(entryDate);
+        return dtoMapper.toEquipmentsDto(repairDtoList);
     }
 }

@@ -9,8 +9,9 @@ import java.util.Optional;
 
 public interface EquipmentRepository extends JpaRepository<Equipment_Repair,Integer> {
     Optional<Equipment_Repair> findBySeriesNumber(String seriesNumber);
-    List<Equipment_Repair> findByTechnician(User technician);
-    List<Equipment_Repair> findByEntreeBy(String username);
-    List<Equipment_Repair> findByIsAccepted(boolean isAccepted);
-    List<Equipment_Repair> findByTechnicianAndIsAccepted(User technician,boolean isAccepted);
+    List<Equipment_Repair> findByTechnicianOrderByEntryDateDesc(User technician);
+    List<Equipment_Repair> findByEntreeByOrderByEntryDateDesc(String username);
+    List<Equipment_Repair> findByIsAcceptedOrderByEntryDateDesc(boolean isAccepted);
+    List<Equipment_Repair> findByEntryDate(String entryDate);
+    List<Equipment_Repair> findByTechnicianAndIsAcceptedOrderByEntryDateDesc(User technician,boolean isAccepted);
 }
