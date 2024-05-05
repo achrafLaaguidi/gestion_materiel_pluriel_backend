@@ -151,8 +151,14 @@ private final UserRepository userRepository;
         Optional<User> userOptional =userRepository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
-            List<Equipment_Repair> equipmentRepairList=equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true);
-            return dtoMapper.toEquipmentsDto(equipmentRepairList);
+            List<EquipmentRepairDto> equipmentRepairList=dtoMapper.toEquipmentsDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
+            List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
+            for(EquipmentRepairDto equipment:equipmentRepairList){
+                if(equipment.getReleaseDate()==null){
+                    equipmentRepairDtos.add(equipment);
+                }
+            }
+            return equipmentRepairDtos;
         }
         else{
             throw new NotFoundException("This User is not found");
@@ -178,14 +184,20 @@ private final UserRepository userRepository;
 
 
     public List<EquipmentRepairDto> listMaterialsRepairedByTechnician(String username) {
-        List<EquipmentRepairDto> repairDtoList=listMaterialsRepairByTechnician(username);
-        List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
-        for(EquipmentRepairDto equipment:repairDtoList){
+        Optional<User> userOptional =userRepository.findByUsername(username);
+        if(userOptional.isPresent()){
+            User user=userOptional.get();
+            List<EquipmentRepairDto> equipmentRepairList=dtoMapper.toEquipmentsDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
+            List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
+        for(EquipmentRepairDto equipment:equipmentRepairList){
             if(equipment.getReleaseDate()!=null){
                 equipmentRepairDtos.add(equipment);
             }
         }
-        return equipmentRepairDtos;
+        return equipmentRepairDtos;}
+        else{
+            throw new NotFoundException("This User is not found");
+        }
     }
 
     public List<EquipmentRepairDto> listMaterialsRepairedByAll() {

@@ -66,7 +66,9 @@ public class GestionAppApplication {
 						new Permission(19,"add_role",List.of(roleAdminSaved)),
 						new Permission(20,"edit_role",List.of(roleAdminSaved)),
 						new Permission(21,"delete_role",List.of(roleAdminSaved)),
-						new Permission(22,"view_roles",List.of(roleAdminSaved))
+						new Permission(22,"view_roles",List.of(roleAdminSaved)),
+						new Permission(23,"add_annonce",List.of(roleAdminSaved)),
+						new Permission(24,"edit_annonce",List.of(roleAdminSaved))
 				));
 				permissionRepository.saveAll(permissions);
 				roleAdminSaved.setPermissions(permissions);
