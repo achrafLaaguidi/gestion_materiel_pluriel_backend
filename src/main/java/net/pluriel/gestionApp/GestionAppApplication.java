@@ -1,14 +1,14 @@
 package net.pluriel.gestionApp;
 
-import net.pluriel.gestionApp.ControllersAndServices.user.UserService;
-import net.pluriel.gestionApp.DTO.RoleDto;
-import net.pluriel.gestionApp.DTO.UserDto;
-import net.pluriel.gestionApp.Models.Role;
-import net.pluriel.gestionApp.Models.Status;
-import net.pluriel.gestionApp.Models.Permission;
-import net.pluriel.gestionApp.Reposotories.PermissionRepository;
-import net.pluriel.gestionApp.Reposotories.RoleRepository;
-import net.pluriel.gestionApp.Reposotories.UserRepository;
+import net.pluriel.gestionApp.service.UserService;
+
+import net.pluriel.gestionApp.dto.UserDto;
+import net.pluriel.gestionApp.models.Role;
+import net.pluriel.gestionApp.models.Status;
+import net.pluriel.gestionApp.models.Permission;
+import net.pluriel.gestionApp.reposotorie.PermissionRepository;
+import net.pluriel.gestionApp.reposotorie.RoleRepository;
+import net.pluriel.gestionApp.reposotorie.UserRepository;
 import net.pluriel.gestionApp.mappers.DtoMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +25,7 @@ public class GestionAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GestionAppApplication.class, args);}
 
-		@Bean
+		/*@Bean
 		public CommandLineRunner commandLineRunner(
 				UserService service, PermissionRepository permissionRepository, DtoMapper dtoMapper, RoleRepository roleRepository, UserRepository userRepository) {
 			return args -> {
@@ -108,6 +108,6 @@ public class GestionAppApplication {
 				System.out.println("Admin token: " + service.addUser(admin).getAccessToken());
 
 			};
-		}
+		}*/
 
 }

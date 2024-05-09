@@ -1,8 +1,8 @@
 package net.pluriel.gestionApp.mappers;
 
 import lombok.RequiredArgsConstructor;
-import net.pluriel.gestionApp.DTO.*;
-import net.pluriel.gestionApp.Models.*;
+import net.pluriel.gestionApp.dto.*;
+import net.pluriel.gestionApp.models.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

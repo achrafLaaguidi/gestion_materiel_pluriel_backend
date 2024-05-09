@@ -1,0 +1,80 @@
+package net.pluriel.gestionApp.models;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Entity
+@Table(name = "Client")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Client {
+    @Id
+    @GeneratedValue
+    private Integer id;
+
+
+    private String dénominationSociale;
+
+    @Column(nullable = false)
+    private String secteurActivité;
+
+    @Enumerated(EnumType.STRING)
+    private NatureJuridique natureJuridique;
+
+    @DecimalMin(value = "0.0", message = " Its cannot be negative")
+    private Double capitalSocial;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    private String dateDeCreation;
+
+    private String adresse;
+
+    @Column(name = "nInscription")
+    private String nInscription;
+
+    private String ville;
+
+
+    @DecimalMin(value = "0.0", message = " Its cannot be negative")
+    private Integer identifiantFiscal;
+
+    private String patente;
+
+    @DecimalMin(value = "0.0", message = " Its cannot be negative")
+    private Integer NCNSS;
+
+    @DecimalMin(value = "0.0", message = " Its cannot be negative")
+    private Integer ICE;
+
+    private String telephone;
+
+    private String fax;
+
+    @Email(message = "You need to enter a valid email")
+    private String email;
+
+    private String representantLegalSociete;
+
+    @Enumerated(EnumType.STRING)
+    private FonctionSociete fonction;
+
+    @OneToOne
+    @JoinColumn(name = "contract_id")
+    @JsonIgnore
+    private Contract contract;
+
+    @OneToMany(mappedBy = "client")
+    @JsonIgnore
+    private List<Equipment_Repair> equipmentRepairList;
+
+}
+
