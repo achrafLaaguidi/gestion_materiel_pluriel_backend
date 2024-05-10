@@ -29,8 +29,7 @@ public class ClientService {
                 throw new ConflictException(String.format("This client [%s] is already exist!", clientDto.getDénominationSociale()));
             }
         }
-        clientRepository.save(dtoMapper.toClient(clientDto));
-        return clientDto;
+        return  dtoMapper.toClientDto(clientRepository.save(dtoMapper.toClient(clientDto)));
     }
 
     @Transactional

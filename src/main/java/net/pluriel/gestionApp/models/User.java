@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
+    @ManyToOne()
     @JsonIgnore
     private Role role;
 

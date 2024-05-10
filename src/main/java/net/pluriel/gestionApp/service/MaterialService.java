@@ -2,6 +2,7 @@ package net.pluriel.gestionApp.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import net.pluriel.gestionApp.dto.ClientDto;
 import net.pluriel.gestionApp.dto.EquipmentRepairDto;
 
 import net.pluriel.gestionApp.exception.ConflictException;
@@ -27,6 +28,7 @@ public class MaterialService {
     private final EquipmentRepository equipmentRepository;
 private final ClientRepository clientRepository;
 private final UserRepository userRepository;
+private final ClientService clientService;
     private final DtoMapper dtoMapper;
 
     public EquipmentRepairDto modifyMaterialRepair(EquipmentRepairDto equipmentRepairDto){
@@ -118,14 +120,12 @@ private final UserRepository userRepository;
                 }
         }
         if(equipmentRepairDto.getClient()!=null) {
-            Optional<Client> clientOptional = clientRepository.findById(equipmentRepairDto.getClient().getId());
+            Optional<Client> clientOptional = clientRepository.findByDénominationSociale(equipmentRepairDto.getClient().getDénominationSociale());
             if (clientOptional.isPresent()) {
                 Client client = clientOptional.get();
                 equipmentRepairDto.setClient(client);
                 Equipment_Repair equipment_repair=dtoMapper.toEquipment(equipmentRepairDto);
                 equipmentRepository.save(equipment_repair);
-                client.getEquipmentRepairList().add(equipment_repair);
-                clientRepository.save(client);
 
             } else {
                 throw new NotFoundException(String.format("Client with ID [%d] not found!", equipmentRepairDto.getClient().getId()));
@@ -154,7 +154,7 @@ private final UserRepository userRepository;
             List<EquipmentRepairDto> equipmentRepairList=dtoMapper.toEquipmentsDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
             List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
             for(EquipmentRepairDto equipment:equipmentRepairList){
-                if(equipment.getReleaseDate()==null){
+                if(equipment.getReleaseDate()==null || equipment.getReleaseDate().isEmpty()){
                     equipmentRepairDtos.add(equipment);
                 }
             }
@@ -190,7 +190,7 @@ private final UserRepository userRepository;
             List<EquipmentRepairDto> equipmentRepairList=dtoMapper.toEquipmentsDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
             List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
         for(EquipmentRepairDto equipment:equipmentRepairList){
-            if(equipment.getReleaseDate()!=null){
+            if(equipment.getReleaseDate()!=null && !equipment.getReleaseDate().equals("") ){
                 equipmentRepairDtos.add(equipment);
             }
         }
@@ -214,5 +214,22 @@ private final UserRepository userRepository;
     public List<EquipmentRepairDto> listMaterialsOfToday(String releaseDate) {
         List<Equipment_Repair> repairDtoList=equipmentRepository.findByReleaseDateAndIsAccepted(releaseDate,true);
         return dtoMapper.toEquipmentsDto(repairDtoList);
+    }
+
+    @Transactional
+    public List<EquipmentRepairDto> addListMaterielRepair(List<EquipmentRepairDto> equipmentRepairDtoList) {
+        List<EquipmentRepairDto> repairDtoList=new ArrayList<>();
+        for(EquipmentRepairDto equipmentRepairDto:equipmentRepairDtoList){
+            equipmentRepairDto.setIsAccepted(true);
+            Optional<Client> clientOptional=clientRepository.findByDénominationSociale(equipmentRepairDto.getClient().getDénominationSociale());
+            if(clientOptional.isPresent()){
+                repairDtoList.add(addMaterielRepair(equipmentRepairDto));
+            }
+            else{
+                clientService.addClient(dtoMapper.toClientDto(equipmentRepairDto.getClient()));
+                repairDtoList.add(addMaterielRepair(equipmentRepairDto));
+            }
+        }
+        return repairDtoList;
     }
 }

@@ -1,6 +1,7 @@
 package net.pluriel.gestionApp.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.pluriel.gestionApp.models.Contract;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ClientDto {
 
 

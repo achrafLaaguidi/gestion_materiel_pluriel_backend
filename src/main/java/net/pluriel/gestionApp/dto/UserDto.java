@@ -1,10 +1,9 @@
 package net.pluriel.gestionApp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import net.pluriel.gestionApp.models.Equipment_Repair;
+import net.pluriel.gestionApp.models.Role;
 import net.pluriel.gestionApp.models.Status;
 
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class UserDto {
     private int id;
     private String firstName;

@@ -27,6 +27,10 @@ public class MaterialController {
     public EquipmentRepairDto addMaterielRepair(@RequestBody EquipmentRepairDto equipment_repair){
         return materialService.addMaterielRepair(equipment_repair);
     }
+    @PostMapping("/addListMaterielRepair")
+    public List<EquipmentRepairDto> addListMaterielRepair(@RequestBody List<EquipmentRepairDto> equipmentRepairDtoList){
+        return materialService.addListMaterielRepair(equipmentRepairDtoList);
+    }
     @PutMapping("/modifyMaterialRepair")
     public EquipmentRepairDto modifyMaterialRepair(@RequestBody EquipmentRepairDto equipment_Repair){
         return materialService.modifyMaterialRepair(equipment_Repair);

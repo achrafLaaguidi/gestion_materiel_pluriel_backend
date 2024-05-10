@@ -1,9 +1,7 @@
 package net.pluriel.gestionApp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import net.pluriel.gestionApp.models.Client;
 import net.pluriel.gestionApp.models.User;
 
@@ -11,6 +9,7 @@ import net.pluriel.gestionApp.models.User;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class EquipmentRepairDto {
     private Integer id;
 
@@ -24,6 +23,7 @@ public class EquipmentRepairDto {
 
 
     private Client client;
+
 
     private User technician;
 

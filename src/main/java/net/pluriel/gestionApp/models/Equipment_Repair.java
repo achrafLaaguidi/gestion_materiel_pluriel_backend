@@ -42,10 +42,10 @@ public class Equipment_Repair {
     private String entreeBy;
 
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
     private String entryDate;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
+    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "dd/MM/yyyy")
     private String releaseDate;
 
     private String dureeIntervention;
