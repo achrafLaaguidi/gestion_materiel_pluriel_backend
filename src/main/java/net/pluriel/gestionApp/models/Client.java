@@ -23,16 +23,16 @@ public class Client {
     @GeneratedValue
     private Integer id;
 
-
+    @Column(nullable = false)
     private String dénominationSociale;
 
-    @Column(nullable = false)
+
     private String secteurActivité;
 
     @Enumerated(EnumType.STRING)
     private NatureJuridique natureJuridique;
 
-    @DecimalMin(value = "0.0", message = " Its cannot be negative")
+
     private Double capitalSocial;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
@@ -46,15 +46,12 @@ public class Client {
     private String ville;
 
 
-    @DecimalMin(value = "0.0", message = " Its cannot be negative")
     private Integer identifiantFiscal;
 
     private String patente;
 
-    @DecimalMin(value = "0.0", message = " Its cannot be negative")
     private Integer NCNSS;
 
-    @DecimalMin(value = "0.0", message = " Its cannot be negative")
     private Integer ICE;
 
     private String telephone;

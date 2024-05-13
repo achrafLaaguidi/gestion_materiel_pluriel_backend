@@ -3,6 +3,7 @@ package net.pluriel.gestionApp.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.pluriel.gestionApp.dto.ClientDto;
+import net.pluriel.gestionApp.dto.EquipmentRepairDto;
 import net.pluriel.gestionApp.exception.ConflictException;
 import net.pluriel.gestionApp.exception.NotFoundException;
 import net.pluriel.gestionApp.models.Client;
@@ -11,6 +12,7 @@ import net.pluriel.gestionApp.reposotorie.ClientRepository;
 import net.pluriel.gestionApp.mappers.DtoMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,4 +110,12 @@ public class ClientService {
     public List<ClientDto> listClient(){
         List<Client> clients=clientRepository.findAll();
         return dtoMapper.toClientsDto(clients);}
+
+    public List<ClientDto> addListClient(List<ClientDto> clientDtoList) {
+        List<ClientDto> clientDtos=new ArrayList<>();
+        for(ClientDto clientDto:clientDtoList){
+            clientDtos.add(addClient(clientDto));
+        }
+        return clientDtos;
+    }
 }
