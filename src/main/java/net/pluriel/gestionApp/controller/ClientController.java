@@ -18,8 +18,8 @@ public class ClientController {
         return clientService.addClient(clientDto);
     }
     @PostMapping("/addListClient")
-    public List<ClientDto> addListClient(@RequestBody List<ClientDto> clientDtoList){
-        return clientService.addListClient( clientDtoList);
+    public boolean addListClient(@RequestBody List<ClientDto> clientDtoList){
+        return clientService.addListClient(clientDtoList);
     }
 
     @PutMapping("/modifyClient")

@@ -37,7 +37,7 @@ private final ClientService clientService;
             Equipment_Repair equipment_repair_existing=equipmentRepairOptional.get();
 
             if(equipmentRepairDto.getSeriesNumber()!=null && !equipmentRepairDto.getSeriesNumber().equals(equipment_repair_existing.getSeriesNumber()) ) {
-                if (equipmentRepository.findBySeriesNumber(equipmentRepairDto.getSeriesNumber()).isPresent()) {
+                if (checkMaterialExist(equipmentRepairDto.getSeriesNumber())) {
                     throw new ConflictException(String.format("This Equipment [%s] already exists!", equipmentRepairDto.getSeriesNumber()));
                 }
                 equipment_repair_existing.setSeriesNumber(equipmentRepairDto.getSeriesNumber());
@@ -105,7 +105,7 @@ private final ClientService clientService;
 
     @Transactional
     public EquipmentRepairDto addMaterielRepair(EquipmentRepairDto equipmentRepairDto) {
-        if (equipmentRepository.findBySeriesNumber(equipmentRepairDto.getSeriesNumber()).isPresent()) {
+        if (checkMaterialExist(equipmentRepairDto.getSeriesNumber())) {
             throw new ConflictException(String.format("This Equipment [%s] already exists!", equipmentRepairDto.getSeriesNumber()));
         }
 
@@ -222,14 +222,20 @@ private final ClientService clientService;
         for(EquipmentRepairDto equipmentRepairDto:equipmentRepairDtoList){
             equipmentRepairDto.setIsAccepted(true);
             Optional<Client> clientOptional=clientRepository.findByDénominationSociale(equipmentRepairDto.getClient().getDénominationSociale());
-            if(clientOptional.isPresent()){
-                repairDtoList.add(addMaterielRepair(equipmentRepairDto));
-            }
-            else{
-                clientService.addClient(dtoMapper.toClientDto(equipmentRepairDto.getClient()));
-                repairDtoList.add(addMaterielRepair(equipmentRepairDto));
+            if(!checkMaterialExist(equipmentRepairDto.getSeriesNumber())){
+                if(clientOptional.isPresent()){
+                    repairDtoList.add(addMaterielRepair(equipmentRepairDto));
+                }
+                else{
+                    clientService.addClient(dtoMapper.toClientDto(equipmentRepairDto.getClient()));
+                    repairDtoList.add(addMaterielRepair(equipmentRepairDto));
+                }
             }
         }
         return repairDtoList;
+    }
+    public boolean checkMaterialExist(String seriesNumber) {
+        Optional<Equipment_Repair> equipmentRepairOptional=equipmentRepository.findBySeriesNumber(seriesNumber);
+        return equipmentRepairOptional.isPresent();
     }
 }

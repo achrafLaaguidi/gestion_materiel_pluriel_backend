@@ -241,6 +241,10 @@ public class UserService {
         if (roleOptional.isPresent()) {
             Role roleExisting = roleOptional.get();
             if (role.getRoleName() != null) {
+                Optional<Role> optionalRole = roleRepository.findByRoleName(role.getRoleName());
+                if (optionalRole.isPresent()&&optionalRole.get().getRoleId()!=role.getRoleId()) {
+                    throw new ConflictException("This role is already exist ");
+                }
                 roleExisting.setRoleName(role.getRoleName());
             }
             if (role.getPermissions()!=null) {

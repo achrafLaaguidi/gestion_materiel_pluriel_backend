@@ -26,8 +26,7 @@ public class ClientService {
 
     public ClientDto addClient(ClientDto clientDto) {
         if (clientDto.getDénominationSociale() != null) {
-            Optional<Client> clientOptional = clientRepository.findByDénominationSociale(clientDto.getDénominationSociale());
-            if (clientOptional.isPresent()) {
+            if (checkClientExists(clientDto.getDénominationSociale())) {
                 throw new ConflictException(String.format("This client [%s] is already exist!", clientDto.getDénominationSociale()));
             }
         }
@@ -111,11 +110,17 @@ public class ClientService {
         List<Client> clients=clientRepository.findAll();
         return dtoMapper.toClientsDto(clients);}
 
-    public List<ClientDto> addListClient(List<ClientDto> clientDtoList) {
+    public boolean addListClient(List<ClientDto> clientDtoList) {
         List<ClientDto> clientDtos=new ArrayList<>();
         for(ClientDto clientDto:clientDtoList){
-            clientDtos.add(addClient(clientDto));
+            if(!checkClientExists(clientDto.getDénominationSociale())){
+                clientDtos.add(addClient(clientDto));
+            }
         }
-        return clientDtos;
+        return !clientDtos.isEmpty();
+    }
+    public boolean checkClientExists(String name) {
+        Optional<Client> clientOptional=clientRepository.findByDénominationSociale(name);
+        return clientOptional.isPresent();
     }
 }
