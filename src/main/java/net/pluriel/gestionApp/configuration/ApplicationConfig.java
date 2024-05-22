@@ -2,10 +2,9 @@ package net.pluriel.gestionApp.configuration;
 
 import lombok.RequiredArgsConstructor;
 import net.pluriel.gestionApp.exception.NotFoundException;
-import net.pluriel.gestionApp.reposotorie.UserRepository;
+import net.pluriel.gestionApp.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

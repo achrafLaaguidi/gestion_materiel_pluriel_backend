@@ -3,9 +3,9 @@ package net.pluriel.gestionApp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.pluriel.gestionApp.models.Client;
-import net.pluriel.gestionApp.models.ContractType;
-import net.pluriel.gestionApp.models.Status;
+import net.pluriel.gestionApp.entity.Client;
+import net.pluriel.gestionApp.entity.ContractType;
+import net.pluriel.gestionApp.entity.Status;
 
 @Data
 @AllArgsConstructor

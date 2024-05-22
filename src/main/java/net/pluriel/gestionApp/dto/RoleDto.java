@@ -1,13 +1,12 @@
 package net.pluriel.gestionApp.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.pluriel.gestionApp.models.Permission;
-import net.pluriel.gestionApp.models.User;
+import net.pluriel.gestionApp.entity.Permission;
+import net.pluriel.gestionApp.entity.User;
 
 import java.util.List;
 

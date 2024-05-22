@@ -1,4 +1,4 @@
-package net.pluriel.gestionApp.models;
+package net.pluriel.gestionApp.entity;
 
 public enum FonctionSociete {
     GERANT_UNIQUE,DG,PDG,PRESIDENT_DU_DIRECTOIRE

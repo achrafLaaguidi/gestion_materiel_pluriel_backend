@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.pluriel.gestionApp.models.Contract;
-import net.pluriel.gestionApp.models.Equipment_Repair;
-import net.pluriel.gestionApp.models.FonctionSociete;
-import net.pluriel.gestionApp.models.NatureJuridique;
+import net.pluriel.gestionApp.entity.Contract;
+import net.pluriel.gestionApp.entity.Equipment_Repair;
+import net.pluriel.gestionApp.entity.FonctionSociete;
+import net.pluriel.gestionApp.entity.NatureJuridique;
 
 import java.util.List;
 

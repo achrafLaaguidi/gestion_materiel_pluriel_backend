@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import net.pluriel.gestionApp.dto.ContractDto;
 import net.pluriel.gestionApp.exception.ConflictException;
 import net.pluriel.gestionApp.exception.NotFoundException;
-import net.pluriel.gestionApp.models.Client;
-import net.pluriel.gestionApp.models.Contract;
-import net.pluriel.gestionApp.models.Status;
-import net.pluriel.gestionApp.reposotorie.ClientRepository;
-import net.pluriel.gestionApp.reposotorie.ContractRepository;
-import net.pluriel.gestionApp.mappers.DtoMapper;
+import net.pluriel.gestionApp.entity.Client;
+import net.pluriel.gestionApp.entity.Contract;
+import net.pluriel.gestionApp.entity.Status;
+import net.pluriel.gestionApp.repository.ClientRepository;
+import net.pluriel.gestionApp.repository.ContractRepository;
+import net.pluriel.gestionApp.mapper.DtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

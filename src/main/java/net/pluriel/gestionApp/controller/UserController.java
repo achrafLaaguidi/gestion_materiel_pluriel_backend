@@ -24,10 +24,7 @@ public class UserController {
     ) {
         return ResponseEntity.ok(userService.authenticate(request));
     }
-    @GetMapping("/getToken/{tokenName}")
-    public TokenIsRevoked getToken(@PathVariable String tokenName){
-        return userService.getToken(tokenName);
-    }
+
     @PostMapping("/addUser")
     public ResponseEntity<AuthenticationResponse> addUser(
             @RequestBody UserDto request

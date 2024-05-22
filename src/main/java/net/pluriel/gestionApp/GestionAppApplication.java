@@ -1,22 +1,8 @@
 package net.pluriel.gestionApp;
 
-import net.pluriel.gestionApp.service.UserService;
-
-import net.pluriel.gestionApp.dto.UserDto;
-import net.pluriel.gestionApp.models.Role;
-import net.pluriel.gestionApp.models.Status;
-import net.pluriel.gestionApp.models.Permission;
-import net.pluriel.gestionApp.reposotorie.PermissionRepository;
-import net.pluriel.gestionApp.reposotorie.RoleRepository;
-import net.pluriel.gestionApp.reposotorie.UserRepository;
-import net.pluriel.gestionApp.mappers.DtoMapper;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.*;
 
 @SpringBootApplication
 @EnableTransactionManagement

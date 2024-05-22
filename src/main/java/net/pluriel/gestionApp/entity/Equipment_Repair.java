@@ -1,4 +1,4 @@
-package net.pluriel.gestionApp.models;
+package net.pluriel.gestionApp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;

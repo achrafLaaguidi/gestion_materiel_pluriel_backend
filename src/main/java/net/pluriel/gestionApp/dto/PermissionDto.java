@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.pluriel.gestionApp.models.Role;
+import net.pluriel.gestionApp.entity.Role;
 
 import java.util.List;
 

@@ -2,20 +2,19 @@ package net.pluriel.gestionApp.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import net.pluriel.gestionApp.dto.ClientDto;
 import net.pluriel.gestionApp.dto.EquipmentRepairDto;
 
 import net.pluriel.gestionApp.exception.ConflictException;
 import net.pluriel.gestionApp.exception.NotFoundException;
 
-import net.pluriel.gestionApp.models.Client;
-import net.pluriel.gestionApp.models.Equipment_Repair;
-import net.pluriel.gestionApp.models.Status;
-import net.pluriel.gestionApp.models.User;
-import net.pluriel.gestionApp.reposotorie.ClientRepository;
-import net.pluriel.gestionApp.reposotorie.EquipmentRepository;
-import net.pluriel.gestionApp.reposotorie.UserRepository;
-import net.pluriel.gestionApp.mappers.DtoMapper;
+import net.pluriel.gestionApp.entity.Client;
+import net.pluriel.gestionApp.entity.Equipment_Repair;
+import net.pluriel.gestionApp.entity.Status;
+import net.pluriel.gestionApp.entity.User;
+import net.pluriel.gestionApp.repository.ClientRepository;
+import net.pluriel.gestionApp.repository.EquipmentRepository;
+import net.pluriel.gestionApp.repository.UserRepository;
+import net.pluriel.gestionApp.mapper.DtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

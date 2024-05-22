@@ -2,8 +2,8 @@ package net.pluriel.gestionApp.dto;
 
 
 import lombok.*;
-import net.pluriel.gestionApp.models.Client;
-import net.pluriel.gestionApp.models.User;
+import net.pluriel.gestionApp.entity.Client;
+import net.pluriel.gestionApp.entity.User;
 
 @Builder
 @Data

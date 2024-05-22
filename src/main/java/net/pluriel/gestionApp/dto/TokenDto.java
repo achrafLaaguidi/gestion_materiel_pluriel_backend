@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import net.pluriel.gestionApp.models.TokenType;
+import net.pluriel.gestionApp.entity.TokenType;
 
 @Data
 @Builder

@@ -1,4 +1,4 @@
-package net.pluriel.gestionApp.models;
+package net.pluriel.gestionApp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

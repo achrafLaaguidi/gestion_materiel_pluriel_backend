@@ -1,8 +1,8 @@
-package net.pluriel.gestionApp.reposotorie;
+package net.pluriel.gestionApp.repository;
 
 import jakarta.transaction.Transactional;
-import net.pluriel.gestionApp.models.Token;
-import net.pluriel.gestionApp.models.User;
+import net.pluriel.gestionApp.entity.Token;
+import net.pluriel.gestionApp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

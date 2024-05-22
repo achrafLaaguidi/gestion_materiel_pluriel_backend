@@ -1,6 +1,6 @@
-package net.pluriel.gestionApp.reposotorie;
+package net.pluriel.gestionApp.repository;
 
-import net.pluriel.gestionApp.models.Role;
+import net.pluriel.gestionApp.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

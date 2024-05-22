@@ -1,10 +1,8 @@
 package net.pluriel.gestionApp.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import net.pluriel.gestionApp.models.Equipment_Repair;
-import net.pluriel.gestionApp.models.Role;
-import net.pluriel.gestionApp.models.Status;
+import net.pluriel.gestionApp.entity.Equipment_Repair;
+import net.pluriel.gestionApp.entity.Status;
 
 import java.util.List;
 

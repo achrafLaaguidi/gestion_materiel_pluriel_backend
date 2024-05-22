@@ -6,9 +6,9 @@ import net.pluriel.gestionApp.configuration.JwtService;
 import net.pluriel.gestionApp.dto.*;
 import net.pluriel.gestionApp.exception.ConflictException;
 import net.pluriel.gestionApp.exception.NotFoundException;
-import net.pluriel.gestionApp.models.*;
-import net.pluriel.gestionApp.reposotorie.*;
-import net.pluriel.gestionApp.mappers.DtoMapper;
+import net.pluriel.gestionApp.entity.*;
+import net.pluriel.gestionApp.repository.*;
+import net.pluriel.gestionApp.mapper.DtoMapper;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -314,13 +314,4 @@ public class UserService {
         return dtoMapper.toRolesDto(roles);
     }
 
-    public TokenIsRevoked getToken(String tokenName) {
-        Token token=tokenRepository.findByToken(tokenName).orElse(null);
-        if(token!=null){
-            return TokenIsRevoked.builder()
-                    .isRevoked(token.revoked)
-                    .build();
-        }
-        return null;
-    }
 }
