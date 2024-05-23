@@ -18,9 +18,9 @@ public class MaterialController {
     public List<EquipmentRepairDto> listMaterialsEntree(){
         return materialService.listMaterialsEntree();
     }
-    @GetMapping("/list_Materials_Of_Today/{releaseDate}")
-    public List<EquipmentRepairDto> listMaterialsOfToday(@PathVariable String releaseDate){
-        return materialService.listMaterialsOfToday(releaseDate);
+    @GetMapping("/list_Materials_Of_Today")
+    public List<EquipmentRepairDto> listMaterialsOfToday(){
+        return materialService.listMaterialsOfToday();
     }
 
     @PostMapping("/addMaterielRepair")
@@ -41,10 +41,7 @@ public class MaterialController {
         return materialService.validateMaterial(equipment_repair);
     }
 
-    @GetMapping("/listMaterielAdded/{username}")
-    public List<EquipmentRepairDto> listMaterielAdded(@PathVariable String username){
-        return materialService.listMaterielAdded(username);
-    }
+
 
 
 

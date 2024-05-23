@@ -17,7 +17,10 @@ import net.pluriel.gestionApp.repository.UserRepository;
 import net.pluriel.gestionApp.mapper.DtoMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,12 +137,7 @@ private final ClientService clientService;
         return equipmentRepairDto;
     }
 
-    public List<EquipmentRepairDto> listMaterielAdded(String username) {
 
-            List<Equipment_Repair> equipmentRepairList = equipmentRepository.findByEntreeByOrderByEntryDateDesc(username);
-            return dtoMapper.toEquipmentsDto(equipmentRepairList);
-
-    }
 
 
 
@@ -166,11 +164,21 @@ private final ClientService clientService;
 
     public List<EquipmentRepairDto> listMaterialsRepairByAll() {
         List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
+            for(Equipment_Repair equipment_repair:listMaterials()){
+                if(equipment_repair.getReleaseDate()==null || equipment_repair.getReleaseDate().isEmpty()){
+                    equipmentRepairList.add(equipment_repair);
+                }
+            }
+
+        return dtoMapper.toEquipmentsDto(equipmentRepairList) ;
+    }
+    public List<Equipment_Repair> listMaterials() {
+        List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
         List<User> userList=userRepository.findByStatus(Status.ACTIVE);
         for(User user:userList){
             equipmentRepairList.addAll(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
         }
-        return dtoMapper.toEquipmentsDto(equipmentRepairList) ;
+        return equipmentRepairList ;
     }
     public List<EquipmentRepairDto> listMaterialsHistory() {
         List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
@@ -200,18 +208,20 @@ private final ClientService clientService;
     }
 
     public List<EquipmentRepairDto> listMaterialsRepairedByAll() {
-        List<EquipmentRepairDto> repairDtoList=listMaterialsRepairByAll();
-        List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
-        for(EquipmentRepairDto equipment:repairDtoList){
-            if(equipment.getReleaseDate()!=null){
-                equipmentRepairDtos.add(equipment);
+        List<Equipment_Repair> equipmentRepair=new ArrayList<>();
+        for(Equipment_Repair equipment:listMaterials()){
+            if(equipment.getReleaseDate()!=null && !equipment.getReleaseDate().isEmpty()){
+                equipmentRepair.add(equipment);
             }
         }
-        return equipmentRepairDtos;
+        return dtoMapper.toEquipmentsDto(equipmentRepair);
     }
 
-    public List<EquipmentRepairDto> listMaterialsOfToday(String releaseDate) {
-        List<Equipment_Repair> repairDtoList=equipmentRepository.findByReleaseDateAndIsAccepted(releaseDate,true);
+    public List<EquipmentRepairDto> listMaterialsOfToday() {
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = today.format(formatter);
+        List<Equipment_Repair> repairDtoList=equipmentRepository.findByReleaseDateAndIsAccepted(formattedDate,true);
         return dtoMapper.toEquipmentsDto(repairDtoList);
     }
 
