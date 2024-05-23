@@ -12,6 +12,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment_Repair,Inte
     List<Equipment_Repair> findByTechnicianOrderByEntryDateDesc(User technician);
     List<Equipment_Repair> findByEntreeByOrderByEntryDateDesc(String username);
     List<Equipment_Repair> findByIsAcceptedOrderByEntryDateDesc(boolean isAccepted);
-    List<Equipment_Repair> findByReleaseDateAndIsAccepted(String releaseDate,Boolean isAccepted);
+    List<Equipment_Repair> findByEntryDate(String entryDate);
     List<Equipment_Repair> findByTechnicianAndIsAcceptedOrderByEntryDateDesc(User technician,boolean isAccepted);
 }

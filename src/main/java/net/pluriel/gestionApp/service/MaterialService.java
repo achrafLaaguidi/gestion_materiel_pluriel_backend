@@ -221,7 +221,7 @@ private final ClientService clientService;
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = today.format(formatter);
-        List<Equipment_Repair> repairDtoList=equipmentRepository.findByReleaseDateAndIsAccepted(formattedDate,true);
+        List<Equipment_Repair> repairDtoList=equipmentRepository.findByEntryDate(formattedDate);
         return dtoMapper.toEquipmentsDto(repairDtoList);
     }
 

@@ -11,7 +11,8 @@ public class GestionAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GestionAppApplication.class, args);}
 
-		/*@Bean
+
+/*@Bean
 		public CommandLineRunner commandLineRunner(
 				UserService service, PermissionRepository permissionRepository, DtoMapper dtoMapper, RoleRepository roleRepository, UserRepository userRepository) {
 			return args -> {
@@ -95,5 +96,4 @@ public class GestionAppApplication {
 
 			};
 		}*/
-
 }
