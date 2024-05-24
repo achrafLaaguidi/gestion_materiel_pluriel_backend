@@ -174,20 +174,13 @@ private final ClientService clientService;
     }
     public List<Equipment_Repair> listMaterials() {
         List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
-        List<User> userList=userRepository.findByStatus(Status.ACTIVE);
+        List<User> userList=userRepository.findAll();
         for(User user:userList){
             equipmentRepairList.addAll(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
         }
         return equipmentRepairList ;
     }
-    public List<EquipmentRepairDto> listMaterialsHistory() {
-        List<Equipment_Repair> equipmentRepairList=new ArrayList<>();
-        List<User> userList=userRepository.findByStatus(Status.INACTIVE);
-        for(User user:userList){
-            equipmentRepairList.addAll(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
-        }
-        return dtoMapper.toEquipmentsDto(equipmentRepairList) ;
-    }
+
 
 
     public List<EquipmentRepairDto> listMaterialsRepairedByTechnician(String username) {

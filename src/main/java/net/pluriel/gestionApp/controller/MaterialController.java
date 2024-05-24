@@ -53,10 +53,6 @@ public class MaterialController {
     public List<EquipmentRepairDto> listMaterialsRepairByAll(){
         return materialService.listMaterialsRepairByAll();
     }
-    @GetMapping("/listMaterialsHistory")
-    public List<EquipmentRepairDto> listMaterialsHistory(){
-        return materialService.listMaterialsHistory();
-    }
     @GetMapping("/listMaterialsRepairedByTechnician/{username}")
     public List<EquipmentRepairDto> listMaterialsRepaiedrByTechnician(@PathVariable String username){
         return materialService.listMaterialsRepairedByTechnician(username);
