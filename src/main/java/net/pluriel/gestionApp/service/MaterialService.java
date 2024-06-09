@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.pluriel.gestionApp.dto.EquipmentRepairDto;
 
+import net.pluriel.gestionApp.dto.EquipmentRepairedDto;
 import net.pluriel.gestionApp.exception.ConflictException;
 import net.pluriel.gestionApp.exception.NotFoundException;
 
@@ -183,13 +184,13 @@ private final ClientService clientService;
 
 
 
-    public List<EquipmentRepairDto> listMaterialsRepairedByTechnician(String username) {
+    public List<EquipmentRepairedDto> listMaterialsRepairedByTechnician(String username) {
         Optional<User> userOptional =userRepository.findByUsername(username);
         if(userOptional.isPresent()){
             User user=userOptional.get();
-            List<EquipmentRepairDto> equipmentRepairList=dtoMapper.toEquipmentsDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
-            List<EquipmentRepairDto> equipmentRepairDtos=new ArrayList<>();
-        for(EquipmentRepairDto equipment:equipmentRepairList){
+            List<EquipmentRepairedDto> equipmentRepairList=dtoMapper.toEquipmentsRepairedDto(equipmentRepository.findByTechnicianAndIsAcceptedOrderByEntryDateDesc(user,true));
+            List<EquipmentRepairedDto> equipmentRepairDtos=new ArrayList<>();
+        for(EquipmentRepairedDto equipment:equipmentRepairList){
             if(equipment.getReleaseDate()!=null && !equipment.getReleaseDate().equals("") ){
                 equipmentRepairDtos.add(equipment);
             }
@@ -200,14 +201,14 @@ private final ClientService clientService;
         }
     }
 
-    public List<EquipmentRepairDto> listMaterialsRepairedByAll() {
+    public List<EquipmentRepairedDto> listMaterialsRepairedByAll() {
         List<Equipment_Repair> equipmentRepair=new ArrayList<>();
         for(Equipment_Repair equipment:listMaterials()){
             if(equipment.getReleaseDate()!=null && !equipment.getReleaseDate().isEmpty()){
                 equipmentRepair.add(equipment);
             }
         }
-        return dtoMapper.toEquipmentsDto(equipmentRepair);
+        return dtoMapper.toEquipmentsRepairedDto(equipmentRepair);
     }
 
     public List<EquipmentRepairDto> listMaterialsOfToday() {

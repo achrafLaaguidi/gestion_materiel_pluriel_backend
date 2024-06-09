@@ -53,6 +53,9 @@ public class DtoMapper {
     public EquipmentRepairDto toEquipmentDto(Equipment_Repair equipment_repair){
         return modelMapper.map(equipment_repair, EquipmentRepairDto.class);
     }
+    public EquipmentRepairedDto toEquipmentRepairedDto(Equipment_Repair equipment_repair){
+        return modelMapper.map(equipment_repair, EquipmentRepairedDto.class);
+    }
     public PermissionDto toPermissionDto(Permission permission){
         return modelMapper.map(permission, PermissionDto.class);
     }
@@ -70,6 +73,13 @@ public class DtoMapper {
         List<EquipmentRepairDto> equipmentRepairDtos = new ArrayList<>();
         for(Equipment_Repair equipment_repair : equipmentRepairList){
             equipmentRepairDtos.add(toEquipmentDto(equipment_repair));
+        }
+        return equipmentRepairDtos;
+    }
+    public List<EquipmentRepairedDto> toEquipmentsRepairedDto(List<Equipment_Repair> equipmentRepairList){
+        List<EquipmentRepairedDto> equipmentRepairDtos = new ArrayList<>();
+        for(Equipment_Repair equipment_repair : equipmentRepairList){
+            equipmentRepairDtos.add(toEquipmentRepairedDto(equipment_repair));
         }
         return equipmentRepairDtos;
     }

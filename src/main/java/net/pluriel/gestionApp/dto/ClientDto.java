@@ -57,6 +57,4 @@ public class ClientDto {
 
     private Contract contract;
 
-    private List<Equipment_Repair> equipmentRepairList;
-
 }

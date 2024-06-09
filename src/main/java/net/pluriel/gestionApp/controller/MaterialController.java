@@ -1,6 +1,7 @@
 package net.pluriel.gestionApp.controller;
 
 import lombok.RequiredArgsConstructor;
+import net.pluriel.gestionApp.dto.EquipmentRepairedDto;
 import net.pluriel.gestionApp.service.MaterialService;
 import net.pluriel.gestionApp.dto.EquipmentRepairDto;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +55,11 @@ public class MaterialController {
         return materialService.listMaterialsRepairByAll();
     }
     @GetMapping("/listMaterialsRepairedByTechnician/{username}")
-    public List<EquipmentRepairDto> listMaterialsRepaiedrByTechnician(@PathVariable String username){
+    public List<EquipmentRepairedDto> listMaterialsRepairedByTechnician(@PathVariable String username){
         return materialService.listMaterialsRepairedByTechnician(username);
     }
     @GetMapping("/listMaterialsRepairedByAll")
-    public List<EquipmentRepairDto> listMaterialsRepairedByAll(){
+    public List<EquipmentRepairedDto> listMaterialsRepairedByAll(){
         return materialService.listMaterialsRepairedByAll();
     }
 
